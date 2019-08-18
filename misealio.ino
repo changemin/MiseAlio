@@ -104,7 +104,7 @@ void httpsRequest()
         client.print(F("GET /openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName="));
         client.print(CITY);
         client.print(F("&dataTerm=daily&pageNo=1&numOfRows=10&ServiceKey="));
-        client.print(APIKEY);
+        client.print(APIkey);
         client.print(F("&ver="));
         client.print(VERSION);
         client.print(F(" HTTP/1.1\r\n"));
@@ -114,5 +114,23 @@ void httpsRequest()
     }
     else {
         Serial.println("[HTTP Request]Connection failed");
+    }
+}
+
+int pm10GradeParse() //html태그 기반
+{
+    while(client.available())
+    {
+        Serial.println("[pm10GradeParse]Function Activated");
+        String line = client.readStringUntil('\n');
+        int indexOfTarget_back = line.indexOf("</pm10Grade>"); 
+        if(indexOfTarget_back>0){
+            String target_front="<pm10Grade>";
+            String pm10Grade = line.substring(line.indexOf(target_front)+target_font.length(),indexOfTarget_back);
+            Serial.print("PM10 Grade: ");
+            Serial.println(pm10Grade);
+            client.stop();
+            return (int)pm10Grade;
+        }
     }
 }

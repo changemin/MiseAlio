@@ -83,9 +83,7 @@ void loop() {
             DataTime = line.substring(line.indexOf(tmp_str)+tmp_str.length(),indexOftmp);
             Serial.print("DataTime : ");
             Serial.println(DataTime); 
-        
         }
-        
         indexOftmp = line.indexOf("</pm10Grade>");
 
         if(indexOftmp>0){
@@ -95,10 +93,7 @@ void loop() {
             Serial.println(pm10Grade);
             client.stop();
             break;
-             
         }
-        
-    
     }
 }
 
