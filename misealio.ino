@@ -17,8 +17,6 @@ const char server[] = "openapi.airkorea.or.kr";
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(pixelNum, pixelPin,NEO_GRB+NEO_KHZ800);
 
-StaticJsonBuffer<11746> jsonBuffer;
-
 WiFiClient client;
 
 void setup()
@@ -34,34 +32,42 @@ void setup()
     {
         delay(500);
         Serial.print(".");
-        BlinkNotificator(255,255,0);
+        blinkNotificator(255,255,0);
     }
     if(WiFi.status() == WL_CONNECTED)
     {
         Serial.println("[Setup]WiFi connected!");
-        BlinkNotificator(0,255,0);
+        blinkNotificator(0,255,0);
     }
     else 
     {
         Serial.println("[Setup]WiFi not connected!");
-        BlinkNotificator(255,0,0);
+        blinkNotificator(255,0,0);
+    }
+    if (!root.success()) 
+    {
+        Serial.println("parseObject() failed");
+        return;
     }
 }
 
 void loop()
 {
-
+    //StaticJsonBuffer<11746> jsonBuffer; 
+    //JsonObject& root = jsonBuffer.parseObject(client); //JSON 문자열을 root라는 JsonObject로 디코딩 / 파싱한다.
+    //char* pm10Grade = root["pm10Grade"];
+    //Serial.println(pm10Grade);
 }
 
 void strip_init()
 {
-    SetStripColor(30, 255, 255, 255);
-    SetStripColor(30, 255, 0, 0);
-    SetStripColor(30, 0, 255, 0);
-    SetStripColor(30, 0, 0, 255);
+    setStripColor(30, 255, 255, 255);
+    setStripColor(30, 255, 0, 0);
+    setStripColor(30, 0, 255, 0);
+    setStripColor(30, 0, 0, 255);
 }
 
-void SetStripColor(int interval, int R, int G, int B)
+void setStripColor(int interval, int R, int G, int B)
 {
     for(int i = 0; i < pixelNum; i++)
     {
@@ -71,7 +77,7 @@ void SetStripColor(int interval, int R, int G, int B)
     }
 }
 
-void ColorCircle(int interval, int R, int G, int B)
+void colorCircle(int interval, int R, int G, int B)
 {
     for(int i = 0; i < pixelNum; i++)
     {
@@ -81,19 +87,20 @@ void ColorCircle(int interval, int R, int G, int B)
     }
 }
 
-void BlinkNotificator(int R, int G, int B)
+void blinkNotificator(int R, int G, int B)
 {
     for(int i = 0 ; i < 2; i ++)
     {
-        SetStripColor(0, R, G, B);
+        setStripColor(0, R, G, B);
         delay(200);
-        SetStripColor(0, 0, 0, 0);
+        setStripColor(0, 0, 0, 0);
         delay(200);
     }
 }
 
 void httpsRequest()
 {
+    http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=%EC%A2%85%EB%A1%9C%EA%B5%AC&dataTerm=month&pageNo=1&numOfRows=10&ServiceKey=&ver=1.3
     Serial.println("[httpsRequest]Function Activated");
 
     client.stop(); //이전의 연결을 끊음
@@ -107,6 +114,7 @@ void httpsRequest()
         client.print(APIkey);
         client.print(F("&ver="));
         client.print(VERSION);
+        client.print(F("&_returnType=json")); //JSON형식으로 받아온다.
         client.print(F(" HTTP/1.1\r\n"));
         client.print(F("Host: openapi.airkorea.or.kr\r\n"));
         client.print(F("Connection: close\r\n"));
@@ -117,7 +125,7 @@ void httpsRequest()
     }
 }
 
-int pm10GradeParse() //html태그 기반
+int pm10GradeParser() //html태그 기반
 {
     while(client.available())
     {
