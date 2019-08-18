@@ -1,6 +1,7 @@
 #include<Adafruit_NeoPixel.h>
 #include<ArduinoJson.h>
 #include<WiFi.h>
+#include<HTTPClient.h>
 
 #define pixelNum 0
 #define pixelPin 0
@@ -10,6 +11,7 @@
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(pixelNum, pixelPin,NEO_GRB+NEO_KHZ800);
 StaticJsonBuffer<11746> jsonBuffer;
+WiFiClient client;
 
 void setup(){
     Serial.begin(115200);
@@ -18,6 +20,7 @@ void setup(){
     strip_init();
 
     WiFi.begin(ssid, password);
+    
     while (WiFi.status() != WL_CONNECTED){
         delay(500);
         Serial.print(".");
@@ -67,4 +70,8 @@ void BlinkNotificator(int R, int G, int B){
         SetStripColor(0, 0, 0, 0);
         delay(200);
     }
+}
+
+int httpsRequest(){
+    Serial.println("[httpsRequest]Function Activated");
 }
