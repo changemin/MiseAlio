@@ -8,6 +8,7 @@
 
 #define pixelNum 0
 #define pixelPin 0
+#define requestInterval 10
 
 #define APIkey ""
 #define CITY "강동구"
@@ -53,10 +54,12 @@ void setup()
 
 void loop()
 {
+    //httpsRequest();
     //StaticJsonBuffer<11746> jsonBuffer; 
     //JsonObject& root = jsonBuffer.parseObject(client); //JSON 문자열을 root라는 JsonObject로 디코딩 / 파싱한다.
     //char* pm10Grade = root["pm10Grade"];
     //Serial.println(pm10Grade);
+    //delay(requestInterval);
 }
 
 void strip_init()
@@ -100,7 +103,7 @@ void blinkNotificator(int R, int G, int B)
 
 void httpsRequest()
 {
-    http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=%EC%A2%85%EB%A1%9C%EA%B5%AC&dataTerm=month&pageNo=1&numOfRows=10&ServiceKey=&ver=1.3
+    //http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=%EC%A2%85%EB%A1%9C%EA%B5%AC&dataTerm=month&pageNo=1&numOfRows=10&ServiceKey=&ver=1.3
     Serial.println("[httpsRequest]Function Activated");
 
     client.stop(); //이전의 연결을 끊음
